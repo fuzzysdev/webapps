@@ -1,3 +1,4 @@
+//THis should not be in the git
 // firebase-config.js
 // ─────────────────────────────────────────────────────────────
 // Replace the values below with your own Firebase project config.
