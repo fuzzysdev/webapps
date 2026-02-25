@@ -12,3 +12,13 @@ Thumbs.db
 # Firebase
 .firebase/
 firebase-debug.log
+firebase-config.js
+
+node_modules/
+build/
+.env
+.env.local
+.DS_Store
+*.log
+dist/
+build/
