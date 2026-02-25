@@ -6,330 +6,527 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Tryouts">
-<title>Ultimate Tryouts</title>
+<meta name="theme-color" content="#0f1117">
 <link rel="manifest" href="/manifest.json">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
-<meta name="theme-color" content="#0f1117">
+<title>Ultimate Tryouts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0f1117;
-    --surface: #181c26;
-    --surface2: #1f2435;
-    --border: #2a2f42;
-    --accent: #00e5a0;
-    --accent-dim: rgba(0,229,160,0.12);
-    --cut: #ff4d6d;
-    --cut-dim: rgba(255,77,109,0.12);
-    --male: #4d9fff;
-    --female: #ff80c8;
-    --text: #e8eaf0;
-    --text-muted: #7a8099;
-    --divider: #f5a623;
-    --card-keep: rgba(0,229,160,0.04);
-    --card-cut: rgba(255,77,109,0.04);
-    --radius: 10px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body { background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif; min-height: 100vh; overflow-x: hidden; }
+/* ── TOKENS ─────────────────────────────────────────────────── */
+:root {
+  --bg:#0f1117; --surface:#181c26; --surface2:#1f2435; --border:#2a2f42;
+  --accent:#00e5a0; --accent-dim:rgba(0,229,160,.12);
+  --cut:#ff4d6d;    --cut-dim:rgba(255,77,109,.12);
+  --male:#4d9fff;   --female:#ff80c8;
+  --text:#e8eaf0;   --text-muted:#7a8099;
+  --divider:#f5a623;
+  --card-keep:rgba(0,229,160,.04); --card-cut:rgba(255,77,109,.04);
+  --radius:10px;
+  --admin:#b57bee;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;overflow-x:hidden}
 
-  /* PRIVACY BLUR */
-  body.blurred .blur-target { filter: blur(8px); pointer-events: none; user-select: none; }
+/* ── PRIVACY BLUR ───────────────────────────────────────────── */
+body.blurred .blur-target{filter:blur(8px);pointer-events:none;user-select:none}
 
-  /* HEADER */
-  header {
-    background: var(--surface); border-bottom: 1px solid var(--border);
-    padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
-    position: sticky; top: 0; z-index: 100; gap: 10px;
-  }
-  header h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: 1px; color: var(--accent); text-transform: uppercase; white-space: nowrap; }
-  header h1 span { color: var(--text-muted); font-weight: 400; }
-  .header-right { display: flex; align-items: center; gap: 8px; }
+/* ── AUTH SCREEN ────────────────────────────────────────────── */
+#auth-screen{
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:24px;
+}
+.auth-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  padding:36px 32px;width:100%;max-width:400px;
+}
+.auth-logo{text-align:center;margin-bottom:28px}
+.auth-logo .disc{font-size:48px;display:block;margin-bottom:8px}
+.auth-logo h1{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;
+  color:var(--accent);letter-spacing:1px;text-transform:uppercase}
+.auth-logo p{font-size:13px;color:var(--text-muted);margin-top:4px}
+.auth-tabs{display:flex;gap:0;margin-bottom:24px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.auth-tab{flex:1;background:none;border:none;color:var(--text-muted);
+  font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;
+  letter-spacing:.5px;padding:10px;cursor:pointer;text-transform:uppercase;transition:all .15s}
+.auth-tab.active{background:var(--accent);color:#0f1117}
+.auth-form{display:flex;flex-direction:column;gap:14px}
+.auth-form.hidden{display:none}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted)}
+.field input{
+  background:var(--bg);border:1px solid var(--border);color:var(--text);
+  font-family:'Barlow',sans-serif;font-size:15px;padding:11px 14px;border-radius:8px;
+  outline:none;transition:border-color .15s;
+}
+.field input:focus{border-color:var(--accent)}
+.btn-primary{
+  background:var(--accent);color:#0f1117;border:none;
+  font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;
+  letter-spacing:.5px;padding:13px;border-radius:8px;cursor:pointer;
+  text-transform:uppercase;transition:opacity .15s;margin-top:4px;
+}
+.btn-primary:hover{opacity:.88}
+.btn-primary:active{opacity:.7}
+.divider-or{text-align:center;color:var(--text-muted);font-size:12px;margin:4px 0;position:relative}
+.divider-or::before,.divider-or::after{
+  content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--border)
+}
+.divider-or::before{left:0}.divider-or::after{right:0}
+.btn-google{
+  background:var(--surface2);border:1px solid var(--border);color:var(--text);
+  font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;
+  padding:11px;border-radius:8px;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;gap:10px;transition:border-color .15s;
+}
+.btn-google:hover{border-color:var(--text-muted)}
+.auth-error{
+  background:var(--cut-dim);border:1px solid rgba(255,77,109,.3);border-radius:8px;
+  color:var(--cut);font-size:13px;padding:10px 14px;display:none;
+}
+.auth-error.show{display:block}
 
-  /* PRIVACY BUTTON */
-  .btn-privacy {
-    background: var(--surface2); border: 1px solid var(--border);
-    color: var(--text-muted); font-size: 18px; padding: 6px 10px;
-    border-radius: 8px; cursor: pointer; transition: all 0.15s; line-height: 1;
-  }
-  .btn-privacy:hover { border-color: var(--divider); color: var(--divider); }
-  body.blurred .btn-privacy { background: var(--divider); border-color: var(--divider); color: #0f1117; }
+/* ── APP SHELL ──────────────────────────────────────────────── */
+#app{display:none}
+#app.ready{display:block}
 
-  /* NAV TABS */
-  .tabs { display: flex; gap: 4px; }
-  .tab-btn {
-    background: none; border: 1px solid var(--border); color: var(--text-muted);
-    font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.5px;
-    padding: 6px 12px; border-radius: 6px; cursor: pointer; text-transform: uppercase; transition: all 0.15s;
-  }
-  .tab-btn.active { background: var(--accent); border-color: var(--accent); color: #0f1117; }
+/* ── HEADER ─────────────────────────────────────────────────── */
+header{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:11px 16px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;gap:10px;
+}
+.header-left{display:flex;align-items:center;gap:12px;min-width:0}
+header h1{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:800;
+  letter-spacing:1px;color:var(--accent);text-transform:uppercase;white-space:nowrap}
+header h1 span{color:var(--text-muted);font-weight:400}
+.sync-badge{
+  font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  padding:2px 8px;border-radius:20px;white-space:nowrap;
+}
+.sync-badge.synced{background:rgba(0,229,160,.12);color:var(--accent)}
+.sync-badge.syncing{background:rgba(245,166,35,.12);color:var(--divider)}
+.sync-badge.offline{background:rgba(255,77,109,.12);color:var(--cut)}
 
-  /* PAGES */
-  .page { display: none; padding: 20px; max-width: 900px; margin: 0 auto; }
-  .page.active { display: block; }
+.header-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.btn-icon-hdr{
+  background:var(--surface2);border:1px solid var(--border);color:var(--text-muted);
+  font-size:16px;padding:6px 9px;border-radius:8px;cursor:pointer;transition:all .15s;line-height:1;
+}
+.btn-icon-hdr:hover{border-color:var(--text-muted);color:var(--text)}
+body.blurred .btn-icon-hdr.blur-btn{background:var(--divider);border-color:var(--divider);color:#0f1117}
 
-  .section-title {
-    font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700;
-    letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px;
-  }
+/* NAV TABS */
+.tabs{display:flex;gap:4px}
+.tab-btn{
+  background:none;border:1px solid var(--border);color:var(--text-muted);
+  font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.5px;
+  padding:6px 11px;border-radius:6px;cursor:pointer;text-transform:uppercase;transition:all .15s;
+}
+.tab-btn.active{background:var(--accent);border-color:var(--accent);color:#0f1117}
 
-  /* ADD PLAYER FORM */
-  .add-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 24px; }
-  .add-form h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-  .form-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
-  .form-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 120px; }
-  .form-group label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); }
-  .form-group input, .form-group select {
-    background: var(--bg); border: 1px solid var(--border); color: var(--text);
-    font-family: 'Barlow', sans-serif; font-size: 15px; padding: 10px 12px; border-radius: 7px; outline: none; transition: border-color 0.15s;
-  }
-  .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
-  .form-group select option { background: var(--surface); }
-  .btn-add {
-    background: var(--accent); color: #0f1117; border: none;
-    font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: 0.5px;
-    padding: 10px 24px; border-radius: 7px; cursor: pointer; text-transform: uppercase; white-space: nowrap; transition: opacity 0.15s; align-self: flex-end;
-  }
-  .btn-add:active { opacity: 0.8; }
+/* ── PAGES ──────────────────────────────────────────────────── */
+.page{display:none;padding:18px;max-width:960px;margin:0 auto}
+.page.active{display:block}
+.section-title{
+  font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;
+}
 
-  /* PLAYERS TABLE */
-  .players-table { width: 100%; border-collapse: collapse; }
-  .players-table th { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); }
-  .players-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
-  .players-table tr:hover td { background: var(--surface2); }
-  .gender-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.5px; }
-  .gender-badge.M { background: rgba(77,159,255,0.15); color: var(--male); }
-  .gender-badge.F { background: rgba(255,128,200,0.15); color: var(--female); }
-  .btn-icon { background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 4px 6px; border-radius: 5px; transition: all 0.15s; font-size: 16px; }
-  .btn-icon:hover { color: var(--cut); background: var(--cut-dim); }
-  .btn-icon.edit:hover { color: var(--accent); background: var(--accent-dim); }
-  .empty-state { text-align: center; padding: 48px 20px; color: var(--text-muted); }
-  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
-  .empty-state p { font-size: 14px; }
+/* ── SESSION PICKER BAR ─────────────────────────────────────── */
+.session-bar{
+  display:flex;align-items:center;gap:10px;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:10px 14px;margin-bottom:18px;flex-wrap:wrap;
+}
+.session-bar label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);white-space:nowrap}
+.session-select{
+  background:var(--bg);border:1px solid var(--border);color:var(--text);
+  font-family:'Barlow',sans-serif;font-size:14px;padding:7px 10px;border-radius:7px;
+  outline:none;flex:1;min-width:140px;transition:border-color .15s;
+}
+.session-select:focus{border-color:var(--accent)}
+.btn-sm{
+  background:var(--surface2);border:1px solid var(--border);color:var(--text-muted);
+  font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.5px;
+  padding:7px 14px;border-radius:7px;cursor:pointer;text-transform:uppercase;transition:all .15s;white-space:nowrap;
+}
+.btn-sm:hover{border-color:var(--accent);color:var(--accent)}
+.btn-sm.danger:hover{border-color:var(--cut);color:var(--cut)}
+.btn-sm.accent{background:var(--accent);border-color:var(--accent);color:#0f1117}
 
-  /* RANKINGS */
-  .rankings-layout { display: flex; gap: 16px; }
-  .gender-column { flex: 1; min-width: 0; }
-  .col-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid; }
-  .col-header.male { border-color: var(--male); }
-  .col-header.female { border-color: var(--female); }
-  .col-header h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
-  .col-header.male h3 { color: var(--male); }
-  .col-header.female h3 { color: var(--female); }
-  .roster-count { font-size: 12px; color: var(--text-muted); font-weight: 600; }
-  .rank-list { list-style: none; min-height: 60px; }
+/* ── ADD PLAYER FORM ────────────────────────────────────────── */
+.add-form{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:20px}
+.add-form h2{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;margin-bottom:14px}
+.form-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.form-group{display:flex;flex-direction:column;gap:5px;flex:1;min-width:110px}
+.form-group label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted)}
+.form-group input,.form-group select{
+  background:var(--bg);border:1px solid var(--border);color:var(--text);
+  font-family:'Barlow',sans-serif;font-size:14px;padding:9px 11px;border-radius:7px;
+  outline:none;transition:border-color .15s;
+}
+.form-group input:focus,.form-group select:focus{border-color:var(--accent)}
+.form-group select option{background:var(--surface)}
+.btn-add{
+  background:var(--accent);color:#0f1117;border:none;
+  font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;letter-spacing:.5px;
+  padding:9px 20px;border-radius:7px;cursor:pointer;text-transform:uppercase;
+  white-space:nowrap;transition:opacity .15s;align-self:flex-end;
+}
+.btn-add:active{opacity:.8}
 
-  /* DRAG HANDLE */
-  .drag-handle { display: flex; flex-direction: column; gap: 3px; padding: 4px 6px; cursor: grab; flex-shrink: 0; }
-  .drag-handle span { display: block; width: 16px; height: 2px; background: var(--border); border-radius: 2px; transition: background 0.15s; }
-  .player-card:hover .drag-handle span { background: var(--text-muted); }
+/* ── PLAYERS TABLE ──────────────────────────────────────────── */
+.players-table{width:100%;border-collapse:collapse}
+.players-table th{
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--text-muted);text-align:left;padding:7px 11px;
+  border-bottom:1px solid var(--border);
+}
+.players-table td{padding:9px 11px;border-bottom:1px solid var(--border);font-size:13px}
+.players-table tr:hover td{background:var(--surface2)}
+.gender-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:.5px}
+.gender-badge.M{background:rgba(77,159,255,.15);color:var(--male)}
+.gender-badge.F{background:rgba(255,128,200,.15);color:var(--female)}
+.tbl-btn{background:none;border:none;cursor:pointer;color:var(--text-muted);padding:3px 5px;border-radius:5px;transition:all .15s;font-size:14px}
+.tbl-btn:hover{color:var(--cut);background:var(--cut-dim)}
+.tbl-btn.edit:hover{color:var(--accent);background:var(--accent-dim)}
+.empty-state{text-align:center;padding:44px 20px;color:var(--text-muted)}
+.empty-state .icon{font-size:44px;margin-bottom:10px}
+.empty-state p{font-size:13px}
 
-  /* PLAYER CARD */
-  .player-card {
-    display: flex; align-items: center; gap: 8px;
-    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 10px 10px; margin-bottom: 6px; user-select: none;
-    transition: box-shadow 0.15s, border-color 0.15s, background 0.15s; position: relative;
-  }
-  .player-card.keep { background: var(--card-keep); border-color: rgba(0,229,160,0.2); }
-  .player-card.cut  { background: var(--card-cut);  border-color: rgba(255,77,109,0.2); }
-  .player-card.dragging  { opacity: 0.35; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
-  .player-card.drag-over { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(0,229,160,0.4); }
+/* ── RANKINGS ───────────────────────────────────────────────── */
+.rankings-layout{display:flex;gap:14px}
+.gender-column{flex:1;min-width:0}
+.col-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:9px;border-bottom:2px solid}
+.col-header.male{border-color:var(--male)}.col-header.female{border-color:var(--female)}
+.col-header h3{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.col-header.male h3{color:var(--male)}.col-header.female h3{color:var(--female)}
+.roster-count{font-size:11px;color:var(--text-muted);font-weight:600}
+.rank-list{list-style:none;min-height:50px}
 
-  .card-info { flex: 1; min-width: 0; }
-  .card-name { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .card-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+/* drag handle */
+.drag-handle{display:flex;flex-direction:column;gap:3px;padding:4px 6px;cursor:grab;flex-shrink:0}
+.drag-handle span{display:block;width:14px;height:2px;background:var(--border);border-radius:2px;transition:background .15s}
+.player-card:hover .drag-handle span{background:var(--text-muted)}
 
-  .card-actions { display: flex; gap: 2px; align-items: center; }
-  .move-btn {
-    background: none; border: 1px solid transparent; cursor: pointer; color: var(--text-muted);
-    padding: 5px 7px; border-radius: 6px; font-size: 13px; line-height: 1; transition: all 0.12s;
-  }
-  .move-btn:hover  { color: var(--text); background: var(--surface2); border-color: var(--border); }
-  .move-btn:active { transform: scale(0.88); }
-  .notes-btn {
-    background: none; border: 1px solid transparent; cursor: pointer; padding: 5px 7px;
-    border-radius: 6px; font-size: 15px; transition: all 0.12s; color: var(--text-muted);
-  }
-  .notes-btn:hover    { color: var(--accent); background: var(--accent-dim); border-color: rgba(0,229,160,0.2); }
-  .notes-btn.has-notes { color: var(--accent); }
+/* player card */
+.player-card{
+  display:flex;align-items:center;gap:7px;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:9px 9px;margin-bottom:5px;user-select:none;
+  transition:box-shadow .15s,border-color .15s,background .15s;
+}
+.player-card.keep{background:var(--card-keep);border-color:rgba(0,229,160,.2)}
+.player-card.cut{background:var(--card-cut);border-color:rgba(255,77,109,.2)}
+.player-card.dragging{opacity:.35;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.player-card.drag-over{border-color:var(--accent);box-shadow:0 0 0 2px rgba(0,229,160,.35)}
+.card-info{flex:1;min-width:0}
+.card-name{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-meta{font-size:10px;color:var(--text-muted);margin-top:2px}
+.card-actions{display:flex;gap:2px;align-items:center}
+.move-btn{
+  background:none;border:1px solid transparent;cursor:pointer;color:var(--text-muted);
+  padding:4px 6px;border-radius:6px;font-size:12px;line-height:1;transition:all .12s;
+}
+.move-btn:hover{color:var(--text);background:var(--surface2);border-color:var(--border)}
+.move-btn:active{transform:scale(.88)}
+.notes-btn{
+  background:none;border:1px solid transparent;cursor:pointer;padding:4px 6px;
+  border-radius:6px;font-size:14px;transition:all .12s;color:var(--text-muted);
+}
+.notes-btn:hover{color:var(--accent);background:var(--accent-dim);border-color:rgba(0,229,160,.2)}
+.notes-btn.has-notes{color:var(--accent)}
 
-  /* CUT DIVIDER */
-  .cut-divider {
-    display: flex; align-items: center; gap: 8px;
-    margin: 4px 0; padding: 5px 0;
-    cursor: ns-resize; touch-action: none; position: relative;
-  }
-  .cut-divider-line { flex: 1; height: 2px; background: var(--divider); border-radius: 2px; }
-  .cut-divider-pill {
-    display: flex; align-items: center; gap: 5px;
-    font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700;
-    letter-spacing: 1.5px; text-transform: uppercase; color: var(--divider);
-    white-space: nowrap; padding: 4px 10px; border: 1px solid var(--divider);
-    border-radius: 20px; background: rgba(245,166,35,0.08); cursor: ns-resize;
-  }
-  .cut-divider-arrows { display: flex; flex-direction: column; gap: 0; }
-  .cut-arrow {
-    background: none; border: none; cursor: pointer; color: var(--divider);
-    font-size: 10px; line-height: 1; padding: 1px 2px; transition: all 0.1s;
-  }
-  .cut-arrow:hover  { color: #fff; transform: scale(1.3); }
-  .cut-arrow:active { transform: scale(0.9); }
-  .cut-divider.drag-highlight .cut-divider-line { background: #fff; }
-  .cut-divider.drag-highlight .cut-divider-pill { background: rgba(245,166,35,0.25); border-color: #fff; color: #fff; }
+/* cut divider */
+.cut-divider{display:flex;align-items:center;gap:7px;margin:3px 0;padding:5px 0;cursor:ns-resize;touch-action:none}
+.cut-divider-line{flex:1;height:2px;background:var(--divider);border-radius:2px}
+.cut-divider-pill{
+  display:flex;align-items:center;gap:4px;
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--divider);
+  white-space:nowrap;padding:3px 9px;border:1px solid var(--divider);
+  border-radius:20px;background:rgba(245,166,35,.08);cursor:ns-resize;
+}
+.cut-divider-arrows{display:flex;flex-direction:column}
+.cut-arrow{background:none;border:none;cursor:pointer;color:var(--divider);font-size:9px;line-height:1;padding:1px 2px;transition:all .1s}
+.cut-arrow:hover{color:#fff;transform:scale(1.3)}
+.cut-divider.drag-highlight .cut-divider-line{background:#fff}
+.cut-divider.drag-highlight .cut-divider-pill{background:rgba(245,166,35,.25);border-color:#fff;color:#fff}
 
-  /* NOTES MODAL */
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 500;
-    display: flex; align-items: flex-end; justify-content: center;
-    opacity: 0; pointer-events: none; transition: opacity 0.2s;
-  }
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
-  .modal {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 16px 16px 0 0;
-    width: 100%; max-width: 600px; padding: 24px 20px 36px;
-    transform: translateY(100%); transition: transform 0.25s cubic-bezier(.4,0,.2,1);
-  }
-  .modal-overlay.open .modal { transform: translateY(0); }
-  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-  .modal-title  { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 800; }
-  .modal-close  { background: var(--surface2); border: none; color: var(--text-muted); font-size: 18px; padding: 6px 10px; border-radius: 7px; cursor: pointer; }
-  .notes-textarea {
-    width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text);
-    font-family: 'Barlow', sans-serif; font-size: 15px; line-height: 1.6;
-    padding: 12px; border-radius: 8px; resize: none; min-height: 180px; outline: none; transition: border-color 0.15s;
-  }
-  .notes-textarea:focus { border-color: var(--accent); }
-  .modal-save {
-    background: var(--accent); color: #0f1117; border: none;
-    font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 800;
-    padding: 12px 28px; border-radius: 8px; cursor: pointer; text-transform: uppercase; margin-top: 14px; width: 100%;
-  }
+/* ── EXPORT ─────────────────────────────────────────────────── */
+.export-section{margin-bottom:24px}
+.export-section h2{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;margin-bottom:12px}
+.export-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.export-text{
+  background:var(--bg);border:1px solid var(--border);border-radius:7px;
+  padding:12px;font-family:monospace;font-size:12px;color:var(--text);
+  white-space:pre;overflow-x:auto;margin-bottom:10px;max-height:260px;overflow-y:auto;line-height:1.6;
+}
+.btn-export{
+  background:var(--surface2);border:1px solid var(--border);color:var(--text);
+  font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;
+  padding:9px 18px;border-radius:7px;cursor:pointer;text-transform:uppercase;
+  letter-spacing:.5px;margin-right:7px;margin-bottom:7px;transition:all .15s;
+}
+.btn-export:hover{border-color:var(--accent);color:var(--accent)}
+.btn-export.primary{background:var(--accent);color:#0f1117;border-color:var(--accent)}
 
-  /* EXPORT */
-  .export-section { margin-bottom: 28px; }
-  .export-section h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 14px; }
-  .export-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
-  .export-text {
-    background: var(--bg); border: 1px solid var(--border); border-radius: 7px;
-    padding: 14px; font-family: monospace; font-size: 13px; color: var(--text);
-    white-space: pre; overflow-x: auto; margin-bottom: 12px; max-height: 280px; overflow-y: auto; line-height: 1.6;
-  }
-  .btn-export {
-    background: var(--surface2); border: 1px solid var(--border); color: var(--text);
-    font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700;
-    padding: 10px 20px; border-radius: 7px; cursor: pointer; text-transform: uppercase;
-    letter-spacing: 0.5px; margin-right: 8px; margin-bottom: 8px; transition: all 0.15s;
-  }
-  .btn-export:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-export.primary { background: var(--accent); color: #0f1117; border-color: var(--accent); }
+/* ── ADMIN PAGE ─────────────────────────────────────────────── */
+.admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.coach-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;
+}
+.coach-card h3{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px}
+.coach-card p{font-size:12px;color:var(--text-muted);margin-bottom:10px}
+.session-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.session-item{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--surface2);border-radius:7px;padding:7px 10px;font-size:12px;
+}
+.session-item span{color:var(--text-muted)}
+.admin-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  padding:2px 8px;border-radius:20px;background:rgba(181,123,238,.15);color:var(--admin);
+  margin-left:8px;vertical-align:middle;
+}
 
-  /* TOAST */
-  .toast {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
-    background: var(--accent); color: #0f1117; font-family: 'Barlow Condensed', sans-serif;
-    font-size: 14px; font-weight: 700; padding: 10px 22px; border-radius: 30px;
-    z-index: 1000; transition: transform 0.25s; pointer-events: none; white-space: nowrap;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+/* ── MODALS ─────────────────────────────────────────────────── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--surface);border:1px solid var(--border);border-radius:16px 16px 0 0;
+  width:100%;max-width:560px;padding:22px 18px 34px;
+  transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);
+}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-center .modal{border-radius:16px;align-self:center;transform:scale(.95);margin:20px}
+.modal-overlay.open .modal-center .modal{transform:scale(1)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:800}
+.modal-close{background:var(--surface2);border:none;color:var(--text-muted);font-size:16px;padding:5px 9px;border-radius:7px;cursor:pointer}
+.notes-textarea{
+  width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);
+  font-family:'Barlow',sans-serif;font-size:14px;line-height:1.6;
+  padding:11px;border-radius:8px;resize:none;min-height:170px;outline:none;transition:border-color .15s;
+}
+.notes-textarea:focus{border-color:var(--accent)}
+.modal-save{
+  background:var(--accent);color:#0f1117;border:none;
+  font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;
+  padding:11px;border-radius:8px;cursor:pointer;text-transform:uppercase;margin-top:12px;width:100%;
+}
+.new-session-input{
+  width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);
+  font-family:'Barlow',sans-serif;font-size:15px;padding:11px 14px;border-radius:8px;
+  outline:none;margin-bottom:14px;transition:border-color .15s;
+}
+.new-session-input:focus{border-color:var(--accent)}
 
-  @media (max-width: 600px) {
-    .rankings-layout { flex-direction: column; }
-    .form-row { flex-direction: column; }
-    header { padding: 10px 12px; }
-    .page { padding: 12px; }
-    header h1 { font-size: 17px; }
-  }
+/* ── TOAST ──────────────────────────────────────────────────── */
+.toast{
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--accent);color:#0f1117;font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:700;padding:9px 20px;border-radius:30px;
+  z-index:1000;transition:transform .25s;pointer-events:none;white-space:nowrap;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.error{background:var(--cut);color:#fff}
+
+/* ── LOADING OVERLAY ────────────────────────────────────────── */
+#loading{
+  position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:9999;gap:16px;
+}
+#loading .spin{
+  width:36px;height:36px;border:3px solid var(--border);
+  border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loading p{font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+@media(max-width:620px){
+  .rankings-layout{flex-direction:column}
+  .form-row{flex-direction:column}
+  header{padding:9px 11px}
+  .page{padding:11px}
+  header h1{font-size:16px}
+  .session-bar{gap:7px}
+}
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Ultimate <span>Tryouts</span></h1>
-  <div class="header-right">
-    <button class="btn-privacy" id="blur-btn" onclick="toggleBlur()" title="Toggle privacy blur">👁</button>
-    <div class="tabs">
-      <button class="tab-btn active" onclick="showPage('players',this)">Players</button>
-      <button class="tab-btn" onclick="showPage('rankings',this)">Rankings</button>
-      <button class="tab-btn" onclick="showPage('export',this)">Export</button>
-    </div>
-  </div>
-</header>
+<!-- Loading -->
+<div id="loading"><div class="spin"></div><p>Loading…</p></div>
 
-<!-- PLAYERS PAGE -->
-<div id="page-players" class="page active blur-target">
-  <div class="add-form">
-    <h2>Add Player</h2>
-    <div class="form-row">
-      <div class="form-group" style="flex:2">
-        <label>Name</label>
-        <input type="text" id="inp-name" placeholder="Full name" autocomplete="off">
-      </div>
-      <div class="form-group">
-        <label>Gender</label>
-        <select id="inp-gender">
-          <option value="M">Male</option>
-          <option value="F">Female</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Grade</label>
-        <select id="inp-grade">
-          <option value="6">6th</option><option value="7">7th</option><option value="8">8th</option>
-          <option value="9">9th</option><option value="10">10th</option>
-          <option value="11">11th</option><option value="12">12th</option>
-        </select>
-      </div>
-      <button class="btn-add" onclick="addPlayer()">+ Add</button>
+<!-- AUTH SCREEN -->
+<div id="auth-screen" style="display:none">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <span class="disc">🥏</span>
+      <h1>Ultimate Tryouts</h1>
+      <p>Sign in to manage your roster</p>
     </div>
-  </div>
-  <div class="section-title">All Players (<span id="player-count">0</span>)</div>
-  <div id="players-list-wrap">
-    <div class="empty-state"><div class="icon">🥏</div><p>No players yet. Add your first player above.</p></div>
-  </div>
-</div>
 
-<!-- RANKINGS PAGE -->
-<div id="page-rankings" class="page blur-target">
-  <div style="display:flex;align-items:center;margin-bottom:16px;">
-    <div class="section-title" style="margin:0">Drag cards to rank · ▲▼ to nudge · Drag or click ▲▼ on ✂ to move cut line</div>
-  </div>
-  <div class="rankings-layout">
-    <div class="gender-column">
-      <div class="col-header male">
-        <h3>♂ Male</h3>
-        <span class="roster-count" id="male-keep-count">0 kept</span>
-      </div>
-      <ul class="rank-list" id="rank-male" data-gender="M"></ul>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+      <button class="auth-tab" onclick="switchAuthTab('register')">Register</button>
     </div>
-    <div class="gender-column">
-      <div class="col-header female">
-        <h3>♀ Female</h3>
-        <span class="roster-count" id="female-keep-count">0 kept</span>
-      </div>
-      <ul class="rank-list" id="rank-female" data-gender="F"></ul>
+
+    <!-- Login -->
+    <div id="auth-login" class="auth-form">
+      <div class="field"><label>Email</label><input type="email" id="login-email" placeholder="coach@school.com" autocomplete="email"></div>
+      <div class="field"><label>Password</label><input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password"></div>
+      <div class="auth-error" id="login-error"></div>
+      <button class="btn-primary" onclick="doEmailLogin()">Sign In</button>
+      <div class="divider-or">or</div>
+      <button class="btn-google" onclick="doGoogleLogin()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.2l6.7-6.7C35.7 2.5 30.2 0 24 0 14.7 0 6.8 5.4 2.9 13.3l7.8 6C12.4 13 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.6 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.2-10.1 7.2-17z"/><path fill="#FBBC05" d="M10.7 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.8-6A24 24 0 0 0 0 24c0 3.8.9 7.5 2.5 10.7l8.2-6z"/><path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.5-5.8c-2 1.4-4.7 2.3-7.7 2.3-6.2 0-11.4-4.2-13.3-9.8l-8.2 6C6.8 42.6 14.7 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+    </div>
+
+    <!-- Register -->
+    <div id="auth-register" class="auth-form hidden">
+      <div class="field"><label>Name</label><input type="text" id="reg-name" placeholder="Coach name"></div>
+      <div class="field"><label>Email</label><input type="email" id="reg-email" placeholder="coach@school.com" autocomplete="email"></div>
+      <div class="field"><label>Password</label><input type="password" id="reg-pass" placeholder="Min 6 characters" autocomplete="new-password"></div>
+      <div class="auth-error" id="reg-error"></div>
+      <button class="btn-primary" onclick="doRegister()">Create Account</button>
+      <div class="divider-or">or</div>
+      <button class="btn-google" onclick="doGoogleLogin()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.2l6.7-6.7C35.7 2.5 30.2 0 24 0 14.7 0 6.8 5.4 2.9 13.3l7.8 6C12.4 13 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.6 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.2-10.1 7.2-17z"/><path fill="#FBBC05" d="M10.7 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.8-6A24 24 0 0 0 0 24c0 3.8.9 7.5 2.5 10.7l8.2-6z"/><path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.5-5.8c-2 1.4-4.7 2.3-7.7 2.3-6.2 0-11.4-4.2-13.3-9.8l-8.2 6C6.8 42.6 14.7 48 24 48z"/></svg>
+        Continue with Google
+      </button>
     </div>
   </div>
 </div>
 
-<!-- EXPORT PAGE -->
-<div id="page-export" class="page blur-target">
-  <div class="export-section">
-    <h2>Final Roster</h2>
-    <div class="export-box">
-      <div class="export-text" id="export-roster"></div>
-      <button class="btn-export primary" onclick="copyText('export-roster')">📋 Copy</button>
-      <button class="btn-export" onclick="downloadCSV('roster')">⬇ CSV</button>
+<!-- APP -->
+<div id="app">
+  <header>
+    <div class="header-left">
+      <h1>Ultimate <span>Tryouts</span></h1>
+      <span class="sync-badge synced" id="sync-badge">✓ Synced</span>
+    </div>
+    <div class="header-right">
+      <button class="btn-icon-hdr blur-btn" id="blur-btn" onclick="toggleBlur()" title="Privacy blur">👁</button>
+      <button class="btn-icon-hdr" onclick="doSignOut()" title="Sign out">⎋</button>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showPage('players',this)">Players</button>
+        <button class="tab-btn" onclick="showPage('rankings',this)">Rankings</button>
+        <button class="tab-btn" onclick="showPage('export',this)">Export</button>
+        <button class="tab-btn admin-tab" id="admin-tab" onclick="showPage('admin',this)" style="display:none">Admin</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SESSION BAR (shared across Players + Rankings + Export) -->
+  <div style="padding:12px 18px 0;max-width:960px;margin:0 auto" class="blur-target" id="session-bar-wrap">
+    <div class="session-bar">
+      <label>Season / Tryout</label>
+      <select class="session-select" id="session-select" onchange="selectSession(this.value)">
+        <option value="">— no sessions yet —</option>
+      </select>
+      <button class="btn-sm accent" onclick="openNewSessionModal()">+ New</button>
+      <button class="btn-sm danger" onclick="deleteCurrentSession()" id="btn-delete-session">Delete</button>
     </div>
   </div>
-  <div class="export-section">
-    <h2>Full Rankings (All Players)</h2>
-    <div class="export-box">
-      <div class="export-text" id="export-full"></div>
-      <button class="btn-export primary" onclick="copyText('export-full')">📋 Copy</button>
-      <button class="btn-export" onclick="downloadCSV('full')">⬇ CSV</button>
+
+  <!-- PLAYERS PAGE -->
+  <div id="page-players" class="page active blur-target">
+    <div class="add-form">
+      <h2>Add Player</h2>
+      <div class="form-row">
+        <div class="form-group" style="flex:2">
+          <label>Name</label>
+          <input type="text" id="inp-name" placeholder="Full name" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <select id="inp-gender"><option value="M">Male</option><option value="F">Female</option></select>
+        </div>
+        <div class="form-group">
+          <label>Grade</label>
+          <select id="inp-grade">
+            <option value="6">6th</option><option value="7">7th</option><option value="8">8th</option>
+            <option value="9">9th</option><option value="10">10th</option>
+            <option value="11">11th</option><option value="12">12th</option>
+          </select>
+        </div>
+        <button class="btn-add" onclick="addPlayer()">+ Add</button>
+      </div>
     </div>
+    <div class="section-title">Players in this session (<span id="player-count">0</span>)</div>
+    <div id="players-list-wrap">
+      <div class="empty-state"><div class="icon">🥏</div><p>Select or create a session above, then add players.</p></div>
+    </div>
+  </div>
+
+  <!-- RANKINGS PAGE -->
+  <div id="page-rankings" class="page blur-target">
+    <div style="margin-bottom:14px">
+      <div class="section-title" style="margin:0">Drag cards · ▲▼ to nudge · Drag or click ▲▼ on ✂ to move cut line</div>
+    </div>
+    <div class="rankings-layout">
+      <div class="gender-column">
+        <div class="col-header male"><h3>♂ Male</h3><span class="roster-count" id="male-keep-count">0 kept</span></div>
+        <ul class="rank-list" id="rank-male" data-gender="M"></ul>
+      </div>
+      <div class="gender-column">
+        <div class="col-header female"><h3>♀ Female</h3><span class="roster-count" id="female-keep-count">0 kept</span></div>
+        <ul class="rank-list" id="rank-female" data-gender="F"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPORT PAGE -->
+  <div id="page-export" class="page blur-target">
+    <div class="export-section">
+      <h2>Final Roster</h2>
+      <div class="export-box">
+        <div class="export-text" id="export-roster"></div>
+        <button class="btn-export primary" onclick="copyText('export-roster')">📋 Copy</button>
+        <button class="btn-export" onclick="downloadCSV('roster')">⬇ CSV</button>
+      </div>
+    </div>
+    <div class="export-section">
+      <h2>Full Rankings</h2>
+      <div class="export-box">
+        <div class="export-text" id="export-full"></div>
+        <button class="btn-export primary" onclick="copyText('export-full')">📋 Copy</button>
+        <button class="btn-export" onclick="downloadCSV('full')">⬇ CSV</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN PAGE -->
+  <div id="page-admin" class="page blur-target">
+    <div style="margin-bottom:16px;display:flex;align-items:center;gap:10px">
+      <div class="section-title" style="margin:0">All Coaches <span class="admin-badge">⚙ Admin</span></div>
+    </div>
+    <div class="admin-grid" id="admin-grid">
+      <div class="empty-state"><div class="icon">👥</div><p>Loading coaches…</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- NEW SESSION MODAL -->
+<div class="modal-overlay modal-center" id="new-session-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">New Season / Tryout</div>
+      <button class="modal-close" onclick="closeModal('new-session-modal')">✕</button>
+    </div>
+    <input class="new-session-input" id="new-session-name" placeholder="e.g. Fall 2025, Spring Tryouts…" maxlength="60">
+    <button class="modal-save" onclick="createSession()">Create Session</button>
   </div>
 </div>
 
@@ -338,339 +535,573 @@
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="modal-player-name">Player Notes</div>
-      <button class="modal-close" onclick="closeNotes()">✕</button>
+      <button class="modal-close" onclick="closeModal('notes-modal')">✕</button>
     </div>
-    <textarea class="notes-textarea" id="notes-textarea" placeholder="Add notes about this player..."></textarea>
+    <textarea class="notes-textarea" id="notes-textarea" placeholder="Add scouting notes…"></textarea>
     <button class="modal-save" onclick="saveNotes()">Save Notes</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<script>
-let players  = JSON.parse(localStorage.getItem('ut_players')  || '[]');
-let rankings = JSON.parse(localStorage.getItem('ut_rankings') || 'null') || { M: [], F: [] };
-let cutIndex = JSON.parse(localStorage.getItem('ut_cut')      || 'null') || { M: 3, F: 3 };
-let notes    = JSON.parse(localStorage.getItem('ut_notes')    || '{}');
-let isBlurred = false;
+<!-- ── FIREBASE SDK ──────────────────────────────────────────── -->
+<script type="module">
+import { initializeApp }                          from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut,
+         createUserWithEmailAndPassword,
+         signInWithEmailAndPassword,
+         GoogleAuthProvider, signInWithPopup,
+         updateProfile }                          from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, collection,
+         getDoc, getDocs, setDoc, updateDoc,
+         deleteDoc, onSnapshot, serverTimestamp,
+         query, where, orderBy }                  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { firebaseConfig, ADMIN_UID }              from './firebase-config.js';
+
+// ── Init ────────────────────────────────────────────────────────
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+const gProvider = new GoogleAuthProvider();
+
+// ── State ────────────────────────────────────────────────────────
+let currentUser  = null;
+let isAdmin      = false;
+let currentSessionId = null;
+let sessions     = {};   // id → {name, players, rankings, cutIndex, notes}
+let unsub        = null; // Firestore listener unsubscribe
+let saveTimer    = null;
+let isBlurred    = false;
 let activeNotesId = null;
 let dragSrc = null, dragGender = null;
 
-function save() {
-  localStorage.setItem('ut_players',  JSON.stringify(players));
-  localStorage.setItem('ut_rankings', JSON.stringify(rankings));
-  localStorage.setItem('ut_cut',      JSON.stringify(cutIndex));
-  localStorage.setItem('ut_notes',    JSON.stringify(notes));
+const LS_KEY = uid => `ut_cache_${uid}`;
+
+// ── Helpers ──────────────────────────────────────────────────────
+function setSyncBadge(state) {
+  const b = document.getElementById('sync-badge');
+  b.className = 'sync-badge ' + state;
+  b.textContent = state === 'synced' ? '✓ Synced' : state === 'syncing' ? '⟳ Saving…' : '⚠ Offline';
+}
+function showToast(msg, isError=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast' + (isError?' error':'') + ' show';
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open') }
+function openModal(id)  { document.getElementById(id).classList.add('open')    }
+
+// ── Local storage cache ──────────────────────────────────────────
+function saveLocal() {
+  if (!currentUser) return;
+  try { localStorage.setItem(LS_KEY(currentUser.uid), JSON.stringify({sessions, currentSessionId})); } catch(e){}
+}
+function loadLocal() {
+  try {
+    const raw = localStorage.getItem(LS_KEY(currentUser.uid));
+    if (raw) { const d = JSON.parse(raw); sessions = d.sessions||{}; currentSessionId = d.currentSessionId||null; }
+  } catch(e){}
 }
 
-// ---- BLUR ----
-function toggleBlur() {
-  isBlurred = !isBlurred;
-  document.body.classList.toggle('blurred', isBlurred);
-  const btn = document.getElementById('blur-btn');
-  btn.textContent = isBlurred ? '🙈' : '👁';
-  btn.title = isBlurred ? 'Tap to reveal' : 'Hide from view';
+// ── Firestore path helpers ───────────────────────────────────────
+const coachRef    = uid  => doc(db, 'coaches', uid);
+const sessionsRef = uid  => collection(db, 'coaches', uid, 'sessions');
+const sessionRef  = (uid,sid) => doc(db, 'coaches', uid, 'sessions', sid);
+
+// ── Save session to Firestore (debounced 1.5 s) ──────────────────
+function scheduleSave() {
+  setSyncBadge('syncing');
+  saveLocal();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(flushSave, 1500);
+}
+async function flushSave() {
+  if (!currentUser || !currentSessionId) return;
+  const s = sessions[currentSessionId];
+  if (!s) return;
+  try {
+    await setDoc(sessionRef(currentUser.uid, currentSessionId), {
+      name:      s.name,
+      players:   s.players,
+      rankings:  s.rankings,
+      cutIndex:  s.cutIndex,
+      notes:     s.notes,
+      updatedAt: serverTimestamp()
+    });
+    setSyncBadge('synced');
+  } catch(e) {
+    setSyncBadge('offline');
+  }
 }
 
-// ---- PAGES ----
-function showPage(name, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  if (btn) btn.classList.add('active');
-  if (name === 'rankings') renderRankings();
-  if (name === 'export')   renderExport();
-  if (name === 'players')  renderPlayersList();
+// ── Auth state ───────────────────────────────────────────────────
+onAuthStateChanged(auth, async user => {
+  document.getElementById('loading').style.display = 'none';
+  if (!user) { showAuthScreen(); return; }
+  currentUser = user;
+  isAdmin = user.uid === ADMIN_UID;
+  console.log('Your UID:', user.uid); // handy for setting ADMIN_UID
+  // ensure coach doc exists
+  await setDoc(coachRef(user.uid), {
+    name:      user.displayName || user.email,
+    email:     user.email,
+    lastSeen:  serverTimestamp()
+  }, { merge: true });
+  showApp();
+});
+
+function showAuthScreen() {
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('app').classList.remove('ready');
+}
+async function showApp() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app').classList.add('ready');
+  if (isAdmin) document.getElementById('admin-tab').style.display = '';
+  loadLocal();
+  await loadSessions();
 }
 
-// ---- PLAYERS ----
+// ── Load all sessions for this coach ────────────────────────────
+async function loadSessions() {
+  if (!currentUser) return;
+  try {
+    const snap = await getDocs(query(sessionsRef(currentUser.uid), orderBy('updatedAt','desc')));
+    sessions = {};
+    snap.forEach(d => { sessions[d.id] = d.data(); });
+    saveLocal();
+  } catch(e) { /* offline – already loaded from cache */ }
+  renderSessionSelect();
+  if (currentSessionId && sessions[currentSessionId]) {
+    selectSession(currentSessionId, false);
+  } else {
+    const ids = Object.keys(sessions);
+    if (ids.length) selectSession(ids[0], false);
+  }
+}
+
+// ── Session CRUD ─────────────────────────────────────────────────
+function renderSessionSelect() {
+  const sel = document.getElementById('session-select');
+  const ids = Object.keys(sessions);
+  if (!ids.length) {
+    sel.innerHTML = '<option value="">— no sessions yet —</option>';
+    return;
+  }
+  sel.innerHTML = ids.map(id =>
+    `<option value="${id}" ${id===currentSessionId?'selected':''}>${escHtml(sessions[id].name)}</option>`
+  ).join('');
+}
+
+function selectSession(id, doRender=true) {
+  currentSessionId = id;
+  renderSessionSelect();
+  saveLocal();
+  if (doRender) { renderPlayersList(); renderRankings(); }
+  else          { renderPlayersList(); }
+}
+
+function openNewSessionModal() {
+  document.getElementById('new-session-name').value = '';
+  openModal('new-session-modal');
+  setTimeout(() => document.getElementById('new-session-name').focus(), 200);
+}
+
+async function createSession() {
+  const name = document.getElementById('new-session-name').value.trim();
+  if (!name) { showToast('Enter a session name', true); return; }
+  const id = 'ses_' + Date.now();
+  const s  = { name, players: [], rankings: {M:[],F:[]}, cutIndex: {M:3,F:3}, notes: {} };
+  sessions[id] = s;
+  closeModal('new-session-modal');
+  try {
+    await setDoc(sessionRef(currentUser.uid, id), { ...s, updatedAt: serverTimestamp() });
+    setSyncBadge('synced');
+  } catch(e) { setSyncBadge('offline'); }
+  saveLocal();
+  selectSession(id);
+  showToast('Session "' + name + '" created!');
+}
+window.createSession = createSession;
+
+async function deleteCurrentSession() {
+  if (!currentSessionId) return;
+  const s = sessions[currentSessionId];
+  if (!confirm('Delete session "' + s.name + '" and all its players? This cannot be undone.')) return;
+  try { await deleteDoc(sessionRef(currentUser.uid, currentSessionId)); } catch(e){}
+  delete sessions[currentSessionId];
+  currentSessionId = null;
+  saveLocal();
+  renderSessionSelect();
+  const ids = Object.keys(sessions);
+  if (ids.length) selectSession(ids[0]);
+  else { renderPlayersList(); }
+  showToast('Session deleted');
+}
+window.deleteCurrentSession = deleteCurrentSession;
+
+// ── Current session data helpers ─────────────────────────────────
+function getSession() {
+  if (!currentSessionId || !sessions[currentSessionId]) return null;
+  return sessions[currentSessionId];
+}
+function mutateSession(fn) {
+  const s = getSession(); if (!s) return;
+  fn(s);
+  scheduleSave();
+}
+
+// ── Players ──────────────────────────────────────────────────────
 function addPlayer() {
+  const s = getSession();
+  if (!s) { showToast('Create or select a session first', true); return; }
   const name   = document.getElementById('inp-name').value.trim();
   const gender = document.getElementById('inp-gender').value;
   const grade  = document.getElementById('inp-grade').value;
-  if (!name) { showToast('Enter a player name'); return; }
+  if (!name) { showToast('Enter a player name', true); return; }
   const id = 'p' + Date.now();
-  players.push({ id, name, gender, grade });
-  rankings[gender].push(id);
-  save();
+  mutateSession(s => {
+    s.players.push({ id, name, gender, grade });
+    s.rankings[gender].push(id);
+  });
   document.getElementById('inp-name').value = '';
   renderPlayersList();
   showToast(name + ' added!');
 }
+window.addPlayer = addPlayer;
 
 function removePlayer(id) {
-  const p = players.find(x => x.id === id);
+  const s = getSession(); if (!s) return;
+  const p = s.players.find(x => x.id === id);
   if (!confirm('Remove ' + p.name + '?')) return;
-  players    = players.filter(x => x.id !== id);
-  rankings.M = rankings.M.filter(x => x !== id);
-  rankings.F = rankings.F.filter(x => x !== id);
-  delete notes[id];
-  save(); renderPlayersList();
+  mutateSession(s => {
+    s.players    = s.players.filter(x => x.id !== id);
+    s.rankings.M = s.rankings.M.filter(x => x !== id);
+    s.rankings.F = s.rankings.F.filter(x => x !== id);
+    delete s.notes[id];
+  });
+  renderPlayersList();
+  if (document.getElementById('page-rankings').classList.contains('active')) renderRankings();
   showToast('Player removed');
 }
+window.removePlayer = removePlayer;
 
 function renderPlayersList() {
   const wrap = document.getElementById('players-list-wrap');
-  document.getElementById('player-count').textContent = players.length;
-  if (!players.length) {
-    wrap.innerHTML = `<div class="empty-state"><div class="icon">🥏</div><p>No players yet. Add your first player above.</p></div>`;
+  const s    = getSession();
+  document.getElementById('player-count').textContent = s ? s.players.length : 0;
+  if (!s || !s.players.length) {
+    wrap.innerHTML = `<div class="empty-state"><div class="icon">🥏</div><p>${s ? 'No players yet. Add your first player above.' : 'Select or create a session to get started.'}</p></div>`;
     return;
   }
-  const sorted = [...players].sort((a,b) => a.name.localeCompare(b.name));
+  const sorted = [...s.players].sort((a,b) => a.name.localeCompare(b.name));
   wrap.innerHTML = `<table class="players-table">
     <thead><tr><th>Name</th><th>Gender</th><th>Grade</th><th></th></tr></thead>
-    <tbody>${sorted.map(p => `
-    <tr>
-      <td style="font-weight:600">${p.name}</td>
+    <tbody>${sorted.map(p => `<tr>
+      <td style="font-weight:600">${escHtml(p.name)}</td>
       <td><span class="gender-badge ${p.gender}">${p.gender==='M'?'Male':'Female'}</span></td>
       <td>Grade ${p.grade}</td>
       <td style="text-align:right">
-        <button class="btn-icon edit" onclick="openNotes('${p.id}')">${notes[p.id]?'📝':'🗒️'}</button>
-        <button class="btn-icon" onclick="removePlayer('${p.id}')">✕</button>
-      </td>
-    </tr>`).join('')}
+        <button class="tbl-btn edit" onclick="openNotes('${p.id}')">${s.notes[p.id]?'📝':'🗒️'}</button>
+        <button class="tbl-btn" onclick="removePlayer('${p.id}')">✕</button>
+      </td></tr>`).join('')}
     </tbody></table>`;
 }
 
-// ---- RANKINGS ----
-function syncRankings() {
+// ── Rankings ─────────────────────────────────────────────────────
+function syncRankings(s) {
   ['M','F'].forEach(g => {
-    const gIds = players.filter(p => p.gender === g).map(p => p.id);
-    rankings[g] = rankings[g].filter(id => gIds.includes(id));
-    gIds.forEach(id => { if (!rankings[g].includes(id)) rankings[g].push(id); });
+    const gIds = s.players.filter(p => p.gender===g).map(p => p.id);
+    s.rankings[g] = (s.rankings[g]||[]).filter(id => gIds.includes(id));
+    gIds.forEach(id => { if (!s.rankings[g].includes(id)) s.rankings[g].push(id); });
   });
 }
 
-function renderRankings() { syncRankings(); renderColumn('M'); renderColumn('F'); save(); }
+function renderRankings() {
+  const s = getSession();
+  if (s) syncRankings(s);
+  renderColumn('M');
+  renderColumn('F');
+}
 
 function renderColumn(gender) {
   const listEl = document.getElementById('rank-' + (gender==='M'?'male':'female'));
-  const ids    = rankings[gender];
-  const cutAt  = Math.min(cutIndex[gender], ids.length);
+  const s = getSession();
+  if (!s) { listEl.innerHTML = '<li style="color:var(--text-muted);font-size:13px;padding:12px">No session selected.</li>'; return; }
+  const ids   = s.rankings[gender] || [];
+  const cutAt = Math.min(s.cutIndex[gender]||0, ids.length);
   listEl.innerHTML = '';
-
-  if (cutAt === 0 && ids.length > 0) listEl.appendChild(makeDivider(gender));
-
-  ids.forEach((id, i) => {
-    const p = players.find(x => x.id === id);
-    if (!p) return;
-    const isKeep  = i < cutAt;
-    const hasNote = notes[id] && notes[id].trim();
-
+  if (cutAt===0 && ids.length>0) listEl.appendChild(makeDivider(gender));
+  ids.forEach((id,i) => {
+    const p = s.players.find(x => x.id===id); if (!p) return;
+    const isKeep = i < cutAt;
+    const hasNote = s.notes[id] && s.notes[id].trim();
     const li = document.createElement('li');
-    li.className = 'player-card ' + (isKeep ? 'keep' : 'cut');
-    li.setAttribute('draggable', 'true');
-    li.dataset.id = id; li.dataset.gender = gender; li.dataset.index = i;
-
+    li.className = 'player-card '+(isKeep?'keep':'cut');
+    li.setAttribute('draggable','true');
+    li.dataset.id=id; li.dataset.gender=gender; li.dataset.index=i;
     li.innerHTML = `
       <div class="drag-handle" title="Drag to reorder"><span></span><span></span><span></span></div>
       <div class="card-info">
-        <div class="card-name">${p.name}</div>
+        <div class="card-name">${escHtml(p.name)}</div>
         <div class="card-meta">Grade ${p.grade} · ${isKeep
-          ? '<span style="color:var(--accent)">✓ Keep</span>'
-          : '<span style="color:var(--cut)">✗ Cut</span>'}</div>
+          ?'<span style="color:var(--accent)">✓ Keep</span>'
+          :'<span style="color:var(--cut)">✗ Cut</span>'}</div>
       </div>
       <div class="card-actions">
-        <button class="move-btn" onclick="moveCard('${gender}',${i},-1)" title="Move up">▲</button>
-        <button class="move-btn" onclick="moveCard('${gender}',${i},1)"  title="Move down">▼</button>
+        <button class="move-btn" onclick="moveCard('${gender}',${i},-1)">▲</button>
+        <button class="move-btn" onclick="moveCard('${gender}',${i},1)">▼</button>
         <button class="notes-btn ${hasNote?'has-notes':''}" onclick="openNotes('${id}')">${hasNote?'📝':'🗒️'}</button>
       </div>`;
-
-    li.addEventListener('dragstart', onDragStart);
-    li.addEventListener('dragover',  onDragOver);
-    li.addEventListener('drop',      onDrop);
-    li.addEventListener('dragend',   onDragEnd);
+    li.addEventListener('dragstart',onDragStart);
+    li.addEventListener('dragover',onDragOver);
+    li.addEventListener('drop',onDrop);
+    li.addEventListener('dragend',onDragEnd);
     listEl.appendChild(li);
-
-    if (i === cutAt - 1) listEl.appendChild(makeDivider(gender));
+    if (i===cutAt-1) listEl.appendChild(makeDivider(gender));
   });
-
-  document.getElementById(gender==='M'?'male-keep-count':'female-keep-count').textContent = cutAt + ' kept';
+  document.getElementById(gender==='M'?'male-keep-count':'female-keep-count').textContent = cutAt+' kept';
 }
 
 function makeDivider(gender) {
   const li = document.createElement('li');
-  li.className = 'cut-divider';
-  li.dataset.isDivider = 'true';
-  li.dataset.gender = gender;
-
-  li.innerHTML = `
+  li.className='cut-divider'; li.dataset.isDivider='true'; li.dataset.gender=gender;
+  li.innerHTML=`
     <div class="cut-divider-line"></div>
     <div class="cut-divider-pill">
       <div class="cut-divider-arrows">
-        <button class="cut-arrow" title="Move cut line up">▲</button>
-        <button class="cut-arrow" title="Move cut line down">▼</button>
-      </div>
-      ✂ Cut Line
-    </div>
+        <button class="cut-arrow" title="Move up">▲</button>
+        <button class="cut-arrow" title="Move down">▼</button>
+      </div>✂ Cut Line</div>
     <div class="cut-divider-line"></div>`;
-
-  const [upBtn, downBtn] = li.querySelectorAll('.cut-arrow');
-  upBtn.addEventListener('click', e => { e.stopPropagation(); moveCut(gender, -1); });
-  downBtn.addEventListener('click', e => { e.stopPropagation(); moveCut(gender, 1); });
-
-  // Touch drag
-  let startY = 0, startCut = 0;
-  li.addEventListener('touchstart', e => {
-    if (e.target.closest('.cut-arrow')) return;
-    startY = e.touches[0].clientY;
-    startCut = cutIndex[gender];
-    li.classList.add('drag-highlight');
+  const [up,dn] = li.querySelectorAll('.cut-arrow');
+  up.addEventListener('click',e=>{e.stopPropagation();moveCut(gender,-1)});
+  dn.addEventListener('click',e=>{e.stopPropagation();moveCut(gender,1)});
+  // touch drag
+  let startY=0,startCut=0;
+  li.addEventListener('touchstart',e=>{
+    if(e.target.closest('.cut-arrow')) return;
+    startY=e.touches[0].clientY; startCut=getSession()?.cutIndex[gender]||0;
+    li.classList.add('drag-highlight'); e.preventDefault();
+  },{passive:false});
+  li.addEventListener('touchmove',e=>{
+    const dy=e.touches[0].clientY-startY, delta=Math.round(dy/54);
+    const s=getSession(); if(!s) return;
+    const nc=Math.max(0,Math.min(s.rankings[gender].length,startCut+delta));
+    if(nc!==s.cutIndex[gender]){ s.cutIndex[gender]=nc; scheduleSave(); renderColumn(gender);
+      const nd=document.querySelector(`#rank-${gender==='M'?'male':'female'} .cut-divider`);
+      if(nd) nd.classList.add('drag-highlight'); }
     e.preventDefault();
-  }, { passive: false });
-
-  li.addEventListener('touchmove', e => {
-    const dy    = e.touches[0].clientY - startY;
-    const delta = Math.round(dy / 54);
-    const newCut = Math.max(0, Math.min(rankings[gender].length, startCut + delta));
-    if (newCut !== cutIndex[gender]) {
-      cutIndex[gender] = newCut; save(); renderColumn(gender);
-      const nd = document.querySelector(`#rank-${gender==='M'?'male':'female'} .cut-divider`);
-      if (nd) nd.classList.add('drag-highlight');
-    }
-    e.preventDefault();
-  }, { passive: false });
-
-  li.addEventListener('touchend', () => li.classList.remove('drag-highlight'));
-
-  // Desktop drag target
-  li.addEventListener('dragover', e => { e.preventDefault(); li.classList.add('drag-highlight'); });
-  li.addEventListener('dragleave', () => li.classList.remove('drag-highlight'));
-  li.addEventListener('drop', e => {
+  },{passive:false});
+  li.addEventListener('touchend',()=>li.classList.remove('drag-highlight'));
+  li.addEventListener('dragover',e=>{e.preventDefault();li.classList.add('drag-highlight')});
+  li.addEventListener('dragleave',()=>li.classList.remove('drag-highlight'));
+  li.addEventListener('drop',e=>{
     e.preventDefault(); li.classList.remove('drag-highlight');
-    if (!dragSrc) return;
-    const g       = dragSrc.dataset.gender;
-    const fromIdx = parseInt(dragSrc.dataset.index);
-    const cut     = cutIndex[g];
-    const list    = rankings[g];
-    const [moved] = list.splice(fromIdx, 1);
-    list.splice(Math.max(0, fromIdx < cut ? cut - 1 : cut), 0, moved);
-    save(); renderColumn(g);
+    if(!dragSrc) return;
+    const g=dragSrc.dataset.gender, s=getSession(); if(!s) return;
+    const from=parseInt(dragSrc.dataset.index), cut=s.cutIndex[g];
+    const [moved]=s.rankings[g].splice(from,1);
+    s.rankings[g].splice(Math.max(0,from<cut?cut-1:cut),0,moved);
+    scheduleSave(); renderColumn(g);
   });
-
   return li;
 }
 
-function moveCut(gender, dir) {
-  cutIndex[gender] = Math.max(0, Math.min(rankings[gender].length, cutIndex[gender] + dir));
-  save(); renderColumn(gender);
+function moveCut(gender,dir) {
+  mutateSession(s=>{s.cutIndex[gender]=Math.max(0,Math.min((s.rankings[gender]||[]).length,s.cutIndex[gender]+dir))});
+  renderColumn(gender);
 }
+window.moveCut = moveCut;
 
-function moveCard(gender, index, dir) {
-  const list = rankings[gender];
-  const ni   = index + dir;
-  if (ni < 0 || ni >= list.length) return;
-  [list[index], list[ni]] = [list[ni], list[index]];
-  save(); renderColumn(gender);
+function moveCard(gender,index,dir) {
+  const s=getSession(); if(!s) return;
+  const ni=index+dir;
+  if(ni<0||ni>=s.rankings[gender].length) return;
+  mutateSession(s=>{[s.rankings[gender][index],s.rankings[gender][ni]]=[s.rankings[gender][ni],s.rankings[gender][index]]});
+  renderColumn(gender);
 }
+window.moveCard=moveCard;
 
-// ---- CARD DRAG ----
-function onDragStart(e) {
-  dragSrc = e.currentTarget; dragGender = dragSrc.dataset.gender;
-  setTimeout(() => dragSrc.classList.add('dragging'), 0);
-  e.dataTransfer.effectAllowed = 'move';
-}
-function onDragEnd() {
-  document.querySelectorAll('.player-card').forEach(c => c.classList.remove('dragging','drag-over'));
-  dragSrc = null;
-}
-function onDragOver(e) {
-  e.preventDefault();
-  if (!dragSrc) return;
-  const t = e.currentTarget;
-  if (t === dragSrc || t.dataset.gender !== dragGender) return;
-  document.querySelectorAll('.player-card').forEach(c => c.classList.remove('drag-over'));
-  t.classList.add('drag-over');
-}
-function onDrop(e) {
-  e.preventDefault();
-  if (!dragSrc) return;
-  const t = e.currentTarget;
-  if (t === dragSrc || t.dataset.gender !== dragGender) return;
-  const g = dragGender;
-  const from = parseInt(dragSrc.dataset.index), to = parseInt(t.dataset.index);
-  const [moved] = rankings[g].splice(from, 1);
-  rankings[g].splice(to, 0, moved);
-  save(); renderColumn(g);
-}
+function onDragStart(e){dragSrc=e.currentTarget;dragGender=dragSrc.dataset.gender;setTimeout(()=>dragSrc.classList.add('dragging'),0);e.dataTransfer.effectAllowed='move'}
+function onDragEnd(){document.querySelectorAll('.player-card').forEach(c=>c.classList.remove('dragging','drag-over'));dragSrc=null}
+function onDragOver(e){e.preventDefault();if(!dragSrc)return;const t=e.currentTarget;if(t===dragSrc||t.dataset.gender!==dragGender)return;document.querySelectorAll('.player-card').forEach(c=>c.classList.remove('drag-over'));t.classList.add('drag-over')}
+function onDrop(e){e.preventDefault();if(!dragSrc)return;const t=e.currentTarget;if(t===dragSrc||t.dataset.gender!==dragGender)return;const g=dragGender,s=getSession();if(!s)return;const from=parseInt(dragSrc.dataset.index),to=parseInt(t.dataset.index);const[moved]=s.rankings[g].splice(from,1);s.rankings[g].splice(to,0,moved);scheduleSave();renderColumn(g)}
 
-// ---- NOTES ----
+// ── Notes ────────────────────────────────────────────────────────
 function openNotes(id) {
-  activeNotesId = id;
-  const p = players.find(x => x.id === id);
-  document.getElementById('modal-player-name').textContent = '📝 ' + p.name;
-  document.getElementById('notes-textarea').value = notes[id] || '';
-  document.getElementById('notes-modal').classList.add('open');
+  const s=getSession(); if(!s) return;
+  const p=s.players.find(x=>x.id===id); if(!p) return;
+  activeNotesId=id;
+  document.getElementById('modal-player-name').textContent='📝 '+p.name;
+  document.getElementById('notes-textarea').value=s.notes[id]||'';
+  openModal('notes-modal');
 }
-function closeNotes() { document.getElementById('notes-modal').classList.remove('open'); activeNotesId = null; }
+window.openNotes=openNotes;
+
 function saveNotes() {
-  if (!activeNotesId) return;
-  notes[activeNotesId] = document.getElementById('notes-textarea').value;
-  save(); closeNotes(); renderPlayersList();
-  if (document.getElementById('page-rankings').classList.contains('active')) renderRankings();
+  if(!activeNotesId) return;
+  mutateSession(s=>{s.notes[activeNotesId]=document.getElementById('notes-textarea').value});
+  closeModal('notes-modal');
+  renderPlayersList();
+  if(document.getElementById('page-rankings').classList.contains('active')) renderRankings();
   showToast('Notes saved');
 }
-document.getElementById('notes-modal').addEventListener('click', function(e) { if (e.target===this) closeNotes(); });
+window.saveNotes=saveNotes;
 
-// ---- EXPORT ----
+document.getElementById('notes-modal').addEventListener('click',function(e){if(e.target===this)closeModal('notes-modal')});
+document.getElementById('new-session-modal').addEventListener('click',function(e){if(e.target===this)closeModal('new-session-modal')});
+
+// ── Export ───────────────────────────────────────────────────────
 function renderExport() {
-  syncRankings();
-  const rosterLines = ['FINAL ROSTER','====================',''];
-  const fullLines   = ['FULL TRYOUT RANKINGS','====================',''];
-  const rosterCSV   = [['Rank','Name','Gender','Grade','Status','Notes']];
-  const fullCSV     = [['Rank','Name','Gender','Grade','Status','Notes']];
-  ['M','F'].forEach(g => {
-    const label = g==='M'?'MALE':'FEMALE', cut = cutIndex[g];
-    rosterLines.push('--- '+label+' ---'); fullLines.push('--- '+label+' ---');
-    rankings[g].forEach((id, i) => {
-      const p = players.find(x => x.id===id); if (!p) return;
-      const status = i<cut?'KEEP':'CUT';
-      const note   = notes[id]?notes[id].replace(/\n/g,' '):'';
-      const rank   = i+1;
-      const line   = `${String(rank).padStart(2,'0')}. ${p.name} (Gr.${p.grade}) [${status}]`;
-      if (i<cut) rosterLines.push(line);
-      fullLines.push(line+(note?' | '+note:''));
-      if (i<cut) rosterCSV.push([rank,p.name,g==='M'?'Male':'Female',p.grade,status,note]);
-      fullCSV.push([rank,p.name,g==='M'?'Male':'Female',p.grade,status,note]);
+  const s=getSession();
+  if(!s){document.getElementById('export-roster').textContent='No session selected.';document.getElementById('export-full').textContent='';return}
+  syncRankings(s);
+  const rL=['FINAL ROSTER','====================',''], fL=['FULL TRYOUT RANKINGS','====================',''];
+  const rC=[['Rank','Name','Gender','Grade','Status','Notes']], fC=[['Rank','Name','Gender','Grade','Status','Notes']];
+  ['M','F'].forEach(g=>{
+    const label=g==='M'?'MALE':'FEMALE', cut=s.cutIndex[g]||0;
+    rL.push('--- '+label+' ---'); fL.push('--- '+label+' ---');
+    (s.rankings[g]||[]).forEach((id,i)=>{
+      const p=s.players.find(x=>x.id===id); if(!p) return;
+      const status=i<cut?'KEEP':'CUT', note=(s.notes[id]||'').replace(/\n/g,' '), rank=i+1;
+      const line=`${String(rank).padStart(2,'0')}. ${p.name} (Gr.${p.grade}) [${status}]`;
+      if(i<cut) rL.push(line); fL.push(line+(note?' | '+note:''));
+      if(i<cut) rC.push([rank,p.name,g==='M'?'Male':'Female',p.grade,status,note]);
+      fC.push([rank,p.name,g==='M'?'Male':'Female',p.grade,status,note]);
     });
-    rosterLines.push(''); fullLines.push('');
+    rL.push(''); fL.push('');
   });
-  document.getElementById('export-roster').textContent = rosterLines.join('\n');
-  document.getElementById('export-full').textContent   = fullLines.join('\n');
-  window._rosterCSV = rosterCSV; window._fullCSV = fullCSV;
+  document.getElementById('export-roster').textContent=rL.join('\n');
+  document.getElementById('export-full').textContent=fL.join('\n');
+  window._rC=rC; window._fC=fC;
 }
 
-function copyText(id) {
-  const text = document.getElementById(id).textContent;
-  navigator.clipboard.writeText(text).then(()=>showToast('Copied!')).catch(()=>{
-    const ta=document.createElement('textarea'); ta.value=text;
-    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta); showToast('Copied!');
-  });
-}
-function downloadCSV(type) {
-  const data = type==='roster'?window._rosterCSV:window._fullCSV;
-  const csv  = data.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
-  const a    = Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv'})),download:(type==='roster'?'roster':'full-rankings')+'.csv'});
-  a.click(); showToast('CSV downloaded!');
+function copyText(id){const t=document.getElementById(id).textContent;navigator.clipboard.writeText(t).then(()=>showToast('Copied!')).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Copied!')})}
+window.copyText=copyText;
+function downloadCSV(type){const data=type==='roster'?window._rC:window._fC;const csv=data.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv'})),download:(type==='roster'?'roster':'full-rankings')+'.csv'});a.click();showToast('CSV downloaded!')}
+window.downloadCSV=downloadCSV;
+
+// ── Admin ────────────────────────────────────────────────────────
+async function loadAdmin() {
+  if (!isAdmin) return;
+  const grid = document.getElementById('admin-grid');
+  grid.innerHTML = '<div class="empty-state"><div class="icon">⏳</div><p>Loading…</p></div>';
+  try {
+    const coachSnap = await getDocs(collection(db,'coaches'));
+    const cards = [];
+    for (const coachDoc of coachSnap.docs) {
+      const c = coachDoc.data();
+      const sesSnap = await getDocs(sessionsRef(coachDoc.id));
+      const sItems = sesSnap.docs.map(d=>`<li class="session-item"><b>${escHtml(d.data().name)}</b><span>${(d.data().players||[]).length} players</span></li>`).join('');
+      cards.push(`<div class="coach-card">
+        <h3>${escHtml(c.name||'Unknown')}${coachDoc.id===ADMIN_UID?'<span class="admin-badge">⚙ Admin</span>':''}</h3>
+        <p>${escHtml(c.email||'')}</p>
+        <ul class="session-list">${sItems||'<li class="session-item" style="color:var(--text-muted)">No sessions yet</li>'}</ul>
+      </div>`);
+    }
+    grid.innerHTML = cards.length ? cards.join('') : '<div class="empty-state"><div class="icon">👥</div><p>No coaches registered yet.</p></div>';
+  } catch(e) {
+    grid.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>Could not load coaches. Check Firestore rules.</p></div>';
+  }
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2200);
+// ── Page routing ─────────────────────────────────────────────────
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(btn) btn.classList.add('active');
+  const sessionBarWrap = document.getElementById('session-bar-wrap');
+  sessionBarWrap.style.display = name==='admin' ? 'none' : '';
+  if(name==='rankings') renderRankings();
+  if(name==='export')   renderExport();
+  if(name==='players')  renderPlayersList();
+  if(name==='admin')    loadAdmin();
+}
+window.showPage = showPage;
+window.openNewSessionModal = openNewSessionModal;
+
+function selectSession(id, doRender=true) {
+  currentSessionId = id;
+  renderSessionSelect();
+  saveLocal();
+  renderPlayersList();
+  if (doRender && document.getElementById('page-rankings').classList.contains('active')) renderRankings();
+}
+window.selectSession = selectSession;
+
+// ── Blur ─────────────────────────────────────────────────────────
+function toggleBlur() {
+  isBlurred=!isBlurred;
+  document.body.classList.toggle('blurred',isBlurred);
+  const btn=document.getElementById('blur-btn');
+  btn.textContent=isBlurred?'🙈':'👁';
+  btn.title=isBlurred?'Tap to reveal':'Hide from view';
+}
+window.toggleBlur=toggleBlur;
+
+// ── Auth actions ─────────────────────────────────────────────────
+async function doEmailLogin() {
+  const email=document.getElementById('login-email').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  const errEl=document.getElementById('login-error');
+  errEl.classList.remove('show');
+  try { await signInWithEmailAndPassword(auth,email,pass); }
+  catch(e){ errEl.textContent=friendlyAuthError(e.code); errEl.classList.add('show'); }
+}
+window.doEmailLogin=doEmailLogin;
+
+async function doRegister() {
+  const name=document.getElementById('reg-name').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const pass=document.getElementById('reg-pass').value;
+  const errEl=document.getElementById('reg-error');
+  errEl.classList.remove('show');
+  try {
+    const cred=await createUserWithEmailAndPassword(auth,email,pass);
+    if(name) await updateProfile(cred.user,{displayName:name});
+  } catch(e){ errEl.textContent=friendlyAuthError(e.code); errEl.classList.add('show'); }
+}
+window.doRegister=doRegister;
+
+async function doGoogleLogin() {
+  try { await signInWithPopup(auth,gProvider); }
+  catch(e){ showToast(friendlyAuthError(e.code),true); }
+}
+window.doGoogleLogin=doGoogleLogin;
+
+async function doSignOut() {
+  if(!confirm('Sign out?')) return;
+  clearTimeout(saveTimer); await flushSave();
+  await signOut(auth);
+}
+window.doSignOut=doSignOut;
+
+function switchAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((b,i)=>b.classList.toggle('active',i===(tab==='login'?0:1)));
+  document.getElementById('auth-login').classList.toggle('hidden',tab!=='login');
+  document.getElementById('auth-register').classList.toggle('hidden',tab!=='register');
+}
+window.switchAuthTab=switchAuthTab;
+
+function friendlyAuthError(code) {
+  const map={'auth/invalid-email':'Invalid email address.','auth/user-not-found':'No account with that email.','auth/wrong-password':'Incorrect password.','auth/email-already-in-use':'That email is already registered.','auth/weak-password':'Password must be at least 6 characters.','auth/popup-closed-by-user':'Sign-in cancelled.'};
+  return map[code]||'Something went wrong. Please try again.';
 }
 
-renderPlayersList();
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-// ---- SERVICE WORKER ----
+// ── Enter key shortcuts ──────────────────────────────────────────
+document.getElementById('inp-name').addEventListener('keydown',e=>{ if(e.key==='Enter') addPlayer(); });
+document.getElementById('login-pass').addEventListener('keydown',e=>{ if(e.key==='Enter') doEmailLogin(); });
+document.getElementById('new-session-name').addEventListener('keydown',e=>{ if(e.key==='Enter') createSession(); });
+
+// ── Service Worker ───────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(reg => console.log('SW registered:', reg.scope))
-      .catch(err => console.warn('SW registration failed:', err));
-  });
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(()=>{}));
 }
+
 </script>
 </body>
 </html>

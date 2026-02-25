@@ -1,0 +1,39 @@
+// firestore.rules
+// Deploy with: firebase deploy --only firestore:rules
+// Or paste into Firebase Console → Firestore → Rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Coach profile ──────────────────────────────────────────
+    // A coach can read/write their own profile.
+    // The admin can read all profiles.
+    match /coaches/{coachId} {
+      allow read:  if request.auth != null &&
+                      (request.auth.uid == coachId || isAdmin());
+      allow write: if request.auth != null &&
+                      request.auth.uid == coachId;
+
+      // ── Sessions (sub-collection) ──────────────────────────
+      // A coach can fully manage their own sessions.
+      // The admin can read all sessions.
+      match /sessions/{sessionId} {
+        allow read:   if request.auth != null &&
+                         (request.auth.uid == coachId || isAdmin());
+        allow create: if request.auth != null &&
+                         request.auth.uid == coachId;
+        allow update: if request.auth != null &&
+                         request.auth.uid == coachId;
+        allow delete: if request.auth != null &&
+                         request.auth.uid == coachId;
+      }
+    }
+
+    // ── Helper: is the requester the admin? ───────────────────
+    // Replace the UID string below with your actual ADMIN_UID.
+    function isAdmin() {
+      return request.auth.uid == "YOUR_ADMIN_UID_HERE";
+    }
+  }
+}
