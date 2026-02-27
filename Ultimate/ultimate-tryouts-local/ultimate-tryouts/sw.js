@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ultimate-tryouts-v1';
+const CACHE_NAME = 'ultimate-tryouts-v2';
 const ASSETS = [
   '/',
   '/index.html',
